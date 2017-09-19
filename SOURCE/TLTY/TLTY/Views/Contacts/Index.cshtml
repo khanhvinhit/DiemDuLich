@@ -1,0 +1,170 @@
+﻿@model List<EntityModel.EF.Contact>
+@{
+    ViewBag.Title = "Liên hệ tới ban quản trị";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+	var diachi = "";
+	if (Model != null || Model.Count > 0)
+	{
+		foreach (var item in Model.Where(x => x.ID == 1))
+		{
+			diachi = item.Address;
+		}
+	}
+	else
+	{
+		diachi = "Thung Lũng Tình Yêu";
+	}
+}
+
+<div class="col-lg-12 baiviet">
+	<p><i class="glyphicon glyphicon-home"></i> <a href="/">Giới thiệu</a>/<a href="/lien-he">Liên hệ</a>
+	</p>
+</div>
+<div class="col-md-12">
+	<div class="container lg">
+		<h1>Thông tin liên hệ của khu du lịch</h1>
+	</div>
+	<div class="container gach"></div>
+	<div class="clearfix"></div>
+</div>
+<div class="col-lg-12 lienhe">
+	<div class="col-md-8 col-md-offset-2 ilienhe">
+		<div class=" col-md-12 itlienhe">
+			@if (Model != null && Model.Count > 0)
+			{
+				foreach (var item in Model)
+				{
+					<div class="col-md-4 itelienhe">
+						<i class="glyphicon glyphicon-ok"></i>
+						<h5>@item.Address</h5>
+					</div>
+					<div class="col-md-4 itelienhe">
+						<i class="glyphicon glyphicon-phone-alt"></i>
+						<h5>@item.Phone</h5>
+					</div>
+					<div class="col-md-4 itelienhe">
+						<i class="glyphicon glyphicon-envelope"></i>
+						<h5>@item.Email</h5>
+					</div>
+				}
+			}
+			else
+			{
+				<div class="col-md-4 itelienhe">
+					<i class="glyphicon glyphicon-ok"></i>
+					<h5>Đang cập nhật</h5>
+				</div>
+				<div class="col-md-4 itelienhe">
+					<i class="glyphicon glyphicon-phone-alt"></i>
+					<h5>Đang cập nhật</h5>
+				</div>
+				<div class="col-md-4 itelienhe">
+					<i class="glyphicon glyphicon-envelope"></i>
+					<h5>Đang cập nhật</h5>
+				</div>
+			}
+
+			<div class="clearfix"></div>
+		</div>
+		<div class="clearfix"></div>
+
+		<div class="col-md-12 binhluan">
+			<h1>Liện hệ ban quản trị</h1>
+			@using (Html.BeginForm(FormMethod.Post))
+			{
+				@Html.AntiForgeryToken()
+				<div class="form-group">
+					<label class="control-label col-md-4"></label>
+					<div class="col-md-8">
+						@Html.ValidationSummary(true, "", new {@class = "text-danger"})
+					</div>
+					<div class="clearfix"></div>
+				</div>
+				<div class="form-group col-md-6">
+					<label>Tên của bạn<a style="color: red"> *</a>:</label>
+					<input type="text" id="txtName" class="form-control" placeholder="Nhập họ tên của bạn. Không quá 250 ký tự." max="250">
+				</div>
+				<div class="form-group col-md-6">
+					<label>Số điện thoại:</label>
+					<input type="text" id="txtPhone" class="form-control" placeholder="Nhập số điện thoại của bạn. Không quá 15 ký tự." max="15">
+				</div>
+				<div class="clearfix"></div>
+				<div class="form-group col-md-12">
+					<label>Email<a style="color: red"> *</a>:</label>
+					<input type="Email" class="form-control" id="txtEmail" placeholder="Nhập email của bạn. Không quá 250 ký tự" max="250">
+				</div>
+				<div class="form-group col-md-12">
+					<label for="comment">Yêu cầu<a style="color: red"> *</a>:</label>
+					<textarea class="form-control" rows="5" id="txtDetail" placeholder="Phản hồi của bạn về dịch vụ."></textarea>
+				</div>
+				<div class="form-group col-md-12">
+					<button class="btn btn-success" id="btnSend" type="button" title="Nhấn để phản hồi." style="width: 100px">Gửi</button>
+				</div>
+			}
+			<div class="clearfix"></div>
+		</div>
+		<div class="clearfix"></div>
+		<div class=" col-md-12 itlienhe">
+			<div class="col-md-4 itelienhe">
+				<i class="glyphicon glyphicon-user"></i>
+				<h5>Sang Khánh Vinh</h5>
+			</div>
+			<div class="col-md-4 itelienhe">
+				<i class="glyphicon glyphicon-user"></i>
+				<h5>Nguyễn Bá Quốc Anh Quân</h5>
+			</div>
+			<div class="col-md-4 itelienhe">
+				<i class="glyphicon glyphicon-user"></i>
+				<h5>Phạm Thị Giang</h5>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+		<div class="clearfix"></div>
+	</div>
+</div>
+
+@section jsFooter{
+    <script>
+        var request = {
+            init: function () {
+                request.registerEvents();
+            }, registerEvents: function () {
+                $('#btnSend').off('click').on('click', function () {
+                    var name = $('#txtName').val();
+                    var phone = $('#txtPhone').val();
+                    var email = $('#txtEmail').val();
+                    var details = $('#txtDetail').val();
+                    var div = document.getElementById('thongbao');
+                    $.ajax({
+                        url: '/Contacts/Feedback',
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            name: name,
+                            phone: phone,
+                            email: email,
+                            detail: details
+                        },
+                        success: function (res) {
+                            div.style.display = 'block';
+                            if (res.status === true) {
+                                $('.abc').html("<i class='fa fa-check'></i>"+res.msg);
+                                request.resetForm();
+                            }
+                            if (res.status === false) {
+                                $('.abc').html("<i class='fa fa-times'></i>"+res.msg);
+                            }
+                        }
+                    });
+                });
+
+            }, resetForm: function () {
+                $('#txtName').val('');
+                $('#txtPhone').val('');
+                $('#txtEmail').val('');
+                $('#txtDetail').val('');
+            }
+        }
+        request.init();
+    </script>
+}

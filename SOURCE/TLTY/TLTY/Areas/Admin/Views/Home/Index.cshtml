@@ -1,0 +1,66 @@
+﻿
+@{
+    ViewBag.Title = "Trang chủ";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+@section header{
+	<h1 class="page-header">Chào mừng đến với trang quản trị</h1>
+}
+<div class="col-lg-12">
+	<div class="panel panel-primary">
+		<div class="panel-body">
+			<h3>Bảng phân quyền</h3>
+			<div class="col-md-6">
+				<div class="panel panel-danger">
+					<div class="panel-body">
+						<h2>Quản trị (ADMIN)</h2>
+						<p>Có toàn quyền</p>
+					</div>
+					<!-- /.panel-body -->
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="panel panel-green">
+					<div class="panel-body">
+						<h2>Điều hành (MOD)</h2>
+						<p>Trừ quản lý tài khoản</p>
+					</div>
+					<!-- /.panel-body -->
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="panel panel-info">
+					<div class="panel-body">
+						<h2>Nhân viên (MEMBER)</h2>
+						<p>Có các quyền:</p>
+						<ol>
+							<li>Quản lý giới thiệu</li>
+							<li>Quản lý nội dung</li>
+							<li>Quản lý trình ảnh</li>
+							<li>Quản lý bảng giá</li>
+						</ol>
+					</div>
+					<!-- /.panel-body -->
+				</div>
+			</div>
+			<div class="col-md-6">
+				<div class="panel panel-success">
+					<div class="panel-body">
+						<h2>Chăm sóc khách hàng (SERVICES)</h2>
+						<p>Có các quyền:</p>
+						<ol>
+							<li>Quản lý phản hồi</li>
+							<li>Quản lý liên hệ</li>
+							<li>Quản lý yêu cầu</li>
+						</ol>
+					</div>
+					<!-- /.panel-body -->
+				</div>
+			</div>
+		</div>
+		<!-- /.panel-body -->
+	</div>
+	<!-- /.panel -->
+</div>
+

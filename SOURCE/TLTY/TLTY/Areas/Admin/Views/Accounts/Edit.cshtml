@@ -1,0 +1,144 @@
+﻿@model EntityModel.EF.Account
+@using TLTY.Areas.Admin.Models
+@{
+	ViewBag.Title = "Chỉnh sửa tài khoản " + @Model.UserName;
+	Layout = null;//"~/Areas/Admin/Views/Shared/_Layout.cshtml";
+	var session = (UserLogin)Session[Constants.USER_SESSION];
+}
+
+<div class="modal fade" id="editModal">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+			@using (Html.BeginForm())
+			{
+				<div class="modal-body" style="max-height: 550px;overflow-y: auto;">
+				    <button type="button" class="close" data-dismiss="modal">
+				        <span aria-hidden="true">&times;</span>
+				        <span class="sr-only">Close</span>
+				    </button>
+                    <h3 style="text-align: center">Chỉnh sửa tài khoản @Model.UserName</h3>
+                    <img src="~/Content/ClientTheme/image/1.png" class="img-responsive" />
+                    @Html.AntiForgeryToken()
+					<div class="form-horizontal">
+						@Html.ValidationSummary(true, "", new { @class = "text-danger" })
+						@Html.HiddenFor(model => model.ID)
+						@Html.HiddenFor(model => model.UserName)
+						@Html.HiddenFor(model => model.Password)
+						@Html.HiddenFor(model => model.CreateDate)
+						@Html.HiddenFor(model => model.Status)
+						<div class="col-md-7">
+							<div class="form-group">
+								<label class="control-label col-md-3">Tài khoản:</label>
+								<div class="col-md-9">
+									<input type="text" class="form-control" value="@Model.UserName" name="UserName" disabled />
+									@Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+								</div>
+							</div>
+							@{
+								if (Model.ID != session.AccountID)
+								{
+									<div class="form-group">
+										<label class="control-label col-md-3">Nhóm:</label>
+										<div class="col-md-9">
+											@Html.DropDownList("AccountGroupID", null, new { @class = "form-control" })
+											@Html.ValidationMessageFor(model => model.AccountGroupID, "", new { @class = "text-danger" })
+										</div>
+									</div>
+								}
+							}
+							<div class="form-group">
+								<label class="control-label col-md-3">Tên:</label>
+								<div class="col-md-9">
+									@Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", placeholder = "Nhập tên ở đây. Không quá 250 ký tự." })
+									@Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-3">Họ:</label>
+								<div class="col-md-9">
+									@Html.TextBoxFor(model => model.LastName, new { @class = "form-control", placeholder = "Nhập họ ở đây. Không quá 250 ký tự." ,max="250"})
+									@Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-3">Ngày sinh:</label>
+								<div class="col-md-9">
+									@Html.TextBoxFor(model => model.Birthday, new { @class = "form-control", id = "datepicker", placeholder = "Nhập ngày sinh ở đây, MM/DD/YYYY" })
+									@Html.ValidationMessageFor(model => model.Birthday, "", new { @class = "text-danger" })
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-3">Email:</label>
+								<div class="col-md-9">
+									@Html.TextBoxFor(model => model.Email, new { @class = "form-control", placeholder = "Nhập email ở đây. Không quá 250 ký tự." })
+									@Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-3">Điện thoại:</label>
+								<div class="col-md-9">
+									@Html.TextBoxFor(model => model.Phone, new { @class = "form-control", placeholder = "Nhập số điện thoại ở đây. Không quá 15 ký tự." })
+									@Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+								</div>
+							</div>
+							<div class="form-group">
+								<label class="control-label col-md-3">Địa chỉ:</label>
+								<div class="col-md-9">
+									@Html.TextBoxFor(model => model.Address, new { @class = "form-control", placeholder = "Nhập địa chỉ ở đây" })
+									@Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+								</div>
+							</div>
+						</div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <div class="col-md-9">
+                                    @Html.TextBoxFor(model => model.Avatar, new { @class = "form-control", placeholder = "Đường dẫn hình" })
+                                    @Html.ValidationMessageFor(model => model.Avatar, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="col-md-3">
+									<button type="button" id="Browse" class="btn btn-primary"><i class="fa fa-picture-o"></i> Thêm ảnh</button>
+                                    <script>
+                                        $('#Browse').click(function () {
+                                            var finder = new CKFinder();
+                                            finder.selectActionFunction = function (fileUrl) {
+                                                //fileUrl = fileUrl.substring(fileUrl.lastIndexOf("/") + 1);
+                                                $('#Avatar').val(fileUrl);
+                                                $('#img').attr('src', fileUrl);
+                                            };
+                                            finder.popup();
+                                        });
+                                    </script>
+                                </div>
+                                <div class="col-md-12" style="margin-top: 10px;">
+                                    <img alt="" id="img" src="@Model.Avatar" width="200" height="245" class="img-responsive" />
+                                </div>
+                                <div class="clearfix"></div>
+                            </div>
+                        </div>
+					    <div class="col-md-12">
+					        <hr/>
+                            <div class="form-group">
+                                <div class="form-actions no-color text-center">
+									<button type="submit" class="btn btn-success"><i class="fa fa-save"></i> Thay đổi</button>
+									<button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i> Đóng</button>
+                                </div>
+                            </div>
+					    </div>
+					</div>
+				</div>
+			}
+		</div>
+	</div>
+</div>
+
+<script src="~/Content/Date/js/bootstrap-datepicker.js"></script>
+<link href="~/Content/Date/css/bootstrap-datepicker.css" rel="stylesheet" />
+<script src="~/Content/Date/locales/bootstrap-datepicker.vi.min.js"></script>
+<script>
+	$(function () {
+		$('#datepicker').datepicker({
+			format: "mm/dd/yyyy",
+			language: "vi"
+		});
+	});
+</script>

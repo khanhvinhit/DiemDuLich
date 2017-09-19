@@ -1,0 +1,88 @@
+﻿@using TLTY.Areas.Admin.Models
+@{
+	var session = (UserLogin)Session[Constants.USER_SESSION];
+	if (session == null)
+	{
+		Response.RedirectToRoute("~/Admin/Login/Index");
+	}
+}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<title>@ViewBag.Title</title>
+	@Styles.Render("~/Content/Admin/css")
+	@Scripts.Render("~/bundles/Admin/modernizr")
+	<style>
+		.panel {
+			z-index: 999;
+			position: inherit;
+		}
+	</style>
+</head>
+<body class="body-content">
+	<div id="wrapper" style="background: #e280fc linear-gradient(55.93deg, #ffbeff 0, #ddd 100%)">
+		@Html.Partial("_Nav")
+		<div id="page-wrapper" style="background: #e280fc linear-gradient(45deg, rgb(0, 244, 255) 0, rgb(232, 171, 239) 100%) repeat scroll 0 0">
+			<div class="row">
+				<div class="col-lg-12">
+					@if (IsSectionDefined("header"))
+					{
+						@RenderSection("header", required: true)
+					}
+					else
+					{
+						<h1 class="page-header">Admin</h1>
+					}
+				</div>
+			</div>
+			<div class="row">
+				@RenderBody()
+			</div>
+		</div>
+	</div>
+	<div id="thongbao" style="display: none">
+		<div class="guestwarn">
+			<a class="close" onclick="closeBox('thongbao'); return false;" title="Đóng thông báo này"><i class="fa fa-times" style="color: #fff"></i></a>
+			<div class="abc"></div>
+		</div>
+	</div>
+	@if (TempData["AlertMessage"] != null)
+	{
+		<div id="AlertBox" hide>
+			<!-- class="alert TempData["AlertType"]"-->
+			<div id='closeelement'>
+				<a href='javascript:closeelement();' title="Nhấn để tắt thông báo"><i class='fa fa-times'></i></a>
+				@Html.Raw(TempData["AlertMessage"])
+				<br />
+			</div>
+		</div>
+	}
+	<!-- jQuery -->
+	@Scripts.Render("~/bundles/Admin/jquery")
+	<script src="~/Content/AdminTheme/tool/ckeditor/ckeditor.js"></script>
+	<script src="~/Content/AdminTheme/tool/ckfinder/ckfinder.js"></script>
+	@Scripts.Render("~/bundles/Admin/bootstrap")
+
+	<script>
+		$(document).ready(function () {
+			$('#dataTables-example').DataTable({
+				responsive: true
+			});
+		});
+	</script>
+
+	<script>
+		$(document).ready(function () {
+			//$("html").niceScroll();
+			$(".panel-primary").niceScroll({ cursorborder: "", cursorcolor: "#00F", boxzoom: true });
+		});
+	</script>
+	@RenderSection("scripts", required: false)
+
+</body>
+</html>

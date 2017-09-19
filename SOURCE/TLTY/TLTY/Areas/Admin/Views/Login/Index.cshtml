@@ -1,0 +1,64 @@
+﻿@{
+	ViewBag.Title = "Đăng nhập";
+	Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>@ViewBag.Title</title>
+	<link href="/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+	@Styles.Render("~/Content/admin/css")
+	@Scripts.Render("~/bundles/Admin/modernizr")
+</head>
+<body style="background: #521a61 linear-gradient(55.93deg,purple 0,navy 100%) fixed; height: 100%">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-4 col-sm-6 col-md-offset-4">
+				<img src="~/Content/ClientTheme/image/tlty.png" style="height: 100%;width: 100%" class="img-responsive" />
+			</div>
+			<div class="col-md-4 col-sm-6 col-md-offset-4">
+				<div class="login-panel panel panel-primary">
+					<div class="panel-body">
+						@using (Html.BeginForm("Login", "Login", FormMethod.Post))
+						{
+							@Html.AntiForgeryToken()
+
+							if (ViewBag.Error != null)
+							{
+								<div class="alert alert-danger"><i class="fa fa-times"></i> @ViewBag.Error</div>
+								<div class="clearfix "></div>
+							}
+							<fieldset>
+								<div class="form-group input-group">
+									<span class="input-group-addon">
+										<i class="fa fa-user"></i>
+									</span>
+									<input class="form-control" placeholder="Nhập tài khoản..." name="UserName" type="text" autofocus>
+								</div>
+								<div class="form-group input-group">
+									<span class="input-group-addon">
+										<i class="fa fa-lock"></i>
+									</span>
+									<input class="form-control" placeholder="Nhập mật khẩu..." name="Password" type="password" value="">
+								</div>
+								<div class="col-md-6">
+									<button type="submit" class="btn btn-danger btn-block"><i class="fa fa-check"></i> Đăng nhập</button>
+								</div>
+								<div class="col-md-6">
+
+									<a href="/" title="Quay trở lại trang chủ" class="btn btn-primary btn-block"><i class="fa fa-home"></i> Trang chủ</a>
+								</div>
+							</fieldset>
+						}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	@Scripts.Render("~/bundles/Admin/jquery")
+	@Scripts.Render("~/bundles/Admin/bootstrap")
+</body>
+</html>
